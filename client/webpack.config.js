@@ -21,10 +21,17 @@ module.exports = {
     /* redbox-react/README.md */
     // ,devtoolModuleFilenameTemplate: '/[absolute-resource-path]'
   },
+devServer: {
+  host: '0.0.0.0', // Bind to all network interfaces
+  compress: true,
+  port: port,
+  allowedHosts: 'all', // Allow access from any host
+  // other configurations...
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
-      __API_SERVER_URL__: JSON.stringify('http://localhost:8080')
+      __API_SERVER_URL__: JSON.stringify('18.159.212.36:8080')
     })
   ],
   resolve: {
