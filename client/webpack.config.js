@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const port = process.env.PORT || 3000;
 
 const entries = [
-  'webpack-dev-server/client?http://localhost:' + port,
+  'webpack-dev-server/client?http://0.0.0.0:' + port,
   'webpack/hot/only-dev-server',
   'react-hot-loader/patch',
   './src/main.tsx'
