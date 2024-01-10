@@ -21,6 +21,7 @@ module.exports = {
   devServer: {
     compress: true,
     disableHostCheck: true,
+    allowedHosts: 'all',
   },
   plugins: [
     new webpack.DefinePlugin({
