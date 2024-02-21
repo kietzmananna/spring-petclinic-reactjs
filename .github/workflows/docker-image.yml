@@ -26,7 +26,9 @@ jobs:
 
     - name: Determine Docker tag
       id: tag
-      run: echo "::set-output name=TAG::${{ github.event.inputs.tag || github.sha }}"
+      run: |
+        echo "Determined tag: ${{ github.event.inputs.tag || github.sha }}"
+        echo "::set-output name=TAG::${{ github.event.inputs.tag || github.sha }}"
       if: github.event_name == 'workflow_dispatch'
 
     - name: Build and push Docker images
