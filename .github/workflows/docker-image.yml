@@ -36,4 +36,4 @@ jobs:
       with:
         file: multistage.Dockerfile
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/app:${{ steps.tag.outputs.TAG }}
+        tags: kietzman/app:${{ steps.tag.outputs.TAG }}
