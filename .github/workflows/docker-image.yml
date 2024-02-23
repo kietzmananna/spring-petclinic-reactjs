@@ -25,4 +25,4 @@ jobs:
       with:
         file: multistage.Dockerfile
         push: true
-        tags: kietzman/app:${{ github.sha }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/app:${{ github.sha }}
