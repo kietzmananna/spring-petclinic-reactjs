@@ -24,9 +24,19 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
         
-    - name: Build and push Docker images
+        
+    - name: Build and push Docker image while workflow run automatically
+      if: github.event_name != 'workflow_dispatch'
       uses: docker/build-push-action@v5.1.0
       with:
-        file: multistage.Dockerfile
-        push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/app:${{ github.sha }}
+          file: multistage.Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/app:${{ github.sha }}
+
+    - name: Build and push Docker image while workflow run manually
+      if: github.event_name == 'workflow_dispatch'
+      uses: docker/build-push-action@v5.1.0
+      with:
+          file: multistage.Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/app:${{ github.event.inputs.tag }}
