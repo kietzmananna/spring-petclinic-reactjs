@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const port = process.env.PORT || 3000;
 
 const entries = [
-  'webpack-dev-server/client?http://localhost:' + port,
+  'webpack-dev-server/client?http://0.0.0.0:' + port,
   'webpack/hot/only-dev-server',
   'react-hot-loader/patch',
   './src/main.tsx'
@@ -21,10 +21,14 @@ module.exports = {
     /* redbox-react/README.md */
     // ,devtoolModuleFilenameTemplate: '/[absolute-resource-path]'
   },
+  devServer: {
+    compress: true,
+    allowedHosts: 'all',
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
-      __API_SERVER_URL__: JSON.stringify('http://localhost:8080')
+      __API_SERVER_URL__: JSON.stringify('http://0.0.0.0:8080')
     })
   ],
   resolve: {
