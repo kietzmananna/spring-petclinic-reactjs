@@ -31,7 +31,7 @@ jobs:
       with:
           file: multistage.Dockerfile
           push: true
-          tags: app:${{ github.sha }}
+          tags: petclinicAK:${{ github.sha }}
 
     - name: Build and push Docker image while workflow run manually
       if: github.event_name == 'workflow_dispatch'
@@ -39,4 +39,4 @@ jobs:
       with:
           file: multistage.Dockerfile
           push: true
-          tags: app:${{ github.event.inputs.tag }}
+          tags: petclinicAK:${{ github.event.inputs.tag }}
