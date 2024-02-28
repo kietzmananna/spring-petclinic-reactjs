@@ -1,42 +1,42 @@
-name: Docker Image CI
+name: Deploy to Amazon ECS
 
 on:
   push:
     branches: [ "master" ]
   workflow_dispatch:
-    inputs:
-     tag:
-       description: 'Tag for Docker image'
-       required: false
+
+env:
+  AWS_REGION: eu-central-1
+  ECR_REPOSITORY: 471112747489.dkr.ecr.eu-central-1.amazonaws.com/githubactions
 
 jobs:
 
-  build:
-  
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
+    environment: production
     
     steps:
+    - name: Checkout
     - uses: actions/checkout@v3
-    
-    - name: Login to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-        
-        
-    - name: Build and push Docker image while workflow run automatically
-      if: github.event_name != 'workflow_dispatch'
-      uses: docker/build-push-action@v5.1.0
-      with:
-          file: multistage.Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/app:${{ github.sha }}
 
-    - name: Build and push Docker image while workflow run manually
-      if: github.event_name == 'workflow_dispatch'
-      uses: docker/build-push-action@v5.1.0
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
       with:
-          file: multistage.Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/app:${{ github.event.inputs.tag }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT        
