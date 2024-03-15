@@ -8,10 +8,10 @@ on:
 env:
   AWS_REGION: eu-central-1
   ECR_REPOSITORY: githubactions
-  ECS_SERVICE: GithubService2
-  ECS_CLUSTER: GithubCluster
+  ECS_SERVICE: NewService1
+  ECS_CLUSTER: NewCulster1
   ECS_TASK_DEFINITION: AWS/task-definition.json
-  CONTAINER_NAME: GithubContainer
+  CONTAINER_NAME: NewContainer1
 
 permissions:
   contents: read
